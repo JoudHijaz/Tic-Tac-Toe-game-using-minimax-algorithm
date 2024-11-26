@@ -1,27 +1,33 @@
+
 body {
-    margin: 0;
-    padding: 0;
+  
     background-color: #4a1a78; 
     font-family: Arial, sans-serif;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
+   
     display: flex;
-    flex-direction: row;
-    gap: 20px; 
-
+    flex-direction: column;
+    justify-content: center;
+  align-items: center;
   }
+.container {
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
   
   .content {
     display: flex;
     flex-direction: column;
     max-width: 800px;
     position: relative;
-    margin-top: 30px;
   }
   
   .title {
-    position: absolute;
     bottom: 10px;
     left: 20px;
   }
@@ -73,7 +79,7 @@ body {
   }
   
   .score.draw {
-    background-color: #a4a9ff;
+    background-color:rgb(218, 216, 216);
   }
   
   .score.player-o {
@@ -124,5 +130,44 @@ body {
   .grid-item:hover {
     background-color: #3cc8f0;
   }
-
+  .button-container {
+    text-align: center;
+  }
   
+  .styled-button {
+    font-family: 'Arial', sans-serif;
+    font-size: 24px;
+    font-weight: bold;
+    color: black;
+    background-color:rgb(218, 216, 216);
+    border-radius: 10px;
+    padding: 10px 40px;
+    cursor: pointer;
+    position: relative;
+  }
+  
+  .styled-button::before,
+  .styled-button::after {
+    content: '';
+
+    top: -8px;
+    left: -8px;
+    border-radius: 12px;
+    z-index: -1;
+  }
+  
+  .styled-button::after {
+    top: 8px;
+    left: 8px;
+  }
+  
+  @media screen and (max-width: 767px) {
+    body{
+      width: 100%;
+    }
+    .container {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+  }
