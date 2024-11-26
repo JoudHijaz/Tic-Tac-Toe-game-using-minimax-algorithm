@@ -1,0 +1,128 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #4a1a78; 
+    font-family: Arial, sans-serif;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    gap: 20px; 
+
+  }
+  
+  .content {
+    display: flex;
+    flex-direction: column;
+    max-width: 800px;
+    position: relative;
+    margin-top: 30px;
+  }
+  
+  .title {
+    position: absolute;
+    bottom: 10px;
+    left: 20px;
+  }
+  
+  .word {
+    display: block;
+    font-size: 50px;
+    font-weight: bold;
+    line-height: 1;
+    margin: 0;
+  }
+  
+  .tic {
+    color: #f6d719; 
+  }
+  
+  .tac {
+    color: #3cc8f0; 
+  }
+  
+  .toe {
+    color: #f6d719; 
+  }
+.scores {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px; 
+    margin-bottom: 20px;
+  }
+  
+  .score {
+    width: 100px;
+    height: 100px;
+    background-color: #cfcfcf; 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    font-weight: bold;
+    text-align: center;
+    color: black;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+  }
+  
+  .score.player-x {
+    background-color: #3cc8f0; 
+  }
+  
+  .score.draw {
+    background-color: #a4a9ff;
+  }
+  
+  .score.player-o {
+    background-color: #f6d719; 
+  }
+  
+  .score-value {
+    font-size: 2rem;
+    margin: 0;
+  }
+  
+  .grid {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .board {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    width: 90vmin;
+    height: 90vmin;
+    max-width: 400px;
+    max-height: 400px;
+  }
+  
+  .grid-item {
+    background-color: #562c8a;
+    border: 2px solid #3cc8f0;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+  }
+  
+  .grid-item:hover {
+    background-color: #3cc8f0;
+  }
+
+  
