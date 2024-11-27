@@ -65,7 +65,6 @@ body {
   .score {
     width: 100px;
     height: 100px;
-    background-color: #cfcfcf; 
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -77,15 +76,15 @@ body {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Subtle shadow */
   }
   
-  .score.player-x {
+  #player-x {
     background-color: #3cc8f0; 
   }
   
-  .score.draw {
-    background-color: #a4a9ff;
-  }
+  #draw {
+    background-color:rgb(218, 216, 216);
+    }
   
-  .score.player-o {
+  #player-o {
     background-color: #f6d719; 
   }
   

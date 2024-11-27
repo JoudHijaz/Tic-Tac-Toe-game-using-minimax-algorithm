@@ -48,9 +48,19 @@ function handleCellClick(index) {
     console.log(result)
     if (result) {
       if (result === 'draw') {
-        displayResult("It's a Draw!");
+        displayResult("It's a Draw !");
+        const drawScoreElement = document.getElementById('draw-score');
+        drawScoreElement.textContent = parseInt(drawScoreElement.textContent) + 1;
       } else {
-        displayResult(`Player ${result} Wins!`);
+        displayResult(`Player ${result} Wins !`);
+        if (result === 'X'){
+          const scoreElement =document.getElementById('score-player-x');
+          scoreElement.textContent =parseInt(scoreElement.textContent)+1;
+        }else{
+          const scoreElement =document.getElementById('score-player-o');
+          scoreElement.textContent =parseInt(scoreElement.textContent)+1;
+        }
+        
       }
       gameOver = true;
       return; // Stop further moves
