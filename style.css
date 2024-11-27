@@ -1,13 +1,23 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #4a1a78; 
+}
 body {
-    margin: 0;
-    padding: 0;
-    background-color: #4a1a78; 
     font-family: Arial, sans-serif;
     justify-content: center;
     align-items: center;
-    overflow: hidden;
+    display: flex;
+    flex-direction:column;
+
+  }
+  .container{
     display: flex;
     flex-direction: row;
+    justify-content: center;
+    align-items: center;
     gap: 20px; 
 
   }
@@ -21,7 +31,6 @@ body {
   }
   
   .title {
-    position: absolute;
     bottom: 10px;
     left: 20px;
   }
@@ -86,11 +95,12 @@ body {
   }
   .message {
     text-align: center;
-    font-size: 1.5rem;
+    font-size: 30px;
     color: white;
     margin-top: 10px;
     margin-bottom: 10px;
   }
+
   
   .grid {
     flex-grow: 1;
@@ -152,15 +162,6 @@ body {
     position: relative;
   }
   
-  .new-game::before,
-  .new-game::after {
-    content: '';
-
-    top: -8px;
-    left: -8px;
-    border-radius: 12px;
-    z-index: -1;
-  }
   
   .new-game::after {
     top: 8px;
@@ -177,4 +178,3 @@ body {
       gap: 20px;
     }
   }
->>>>>>> a62d8e5 (Implemented winning logic, result display, and reset functionality)
