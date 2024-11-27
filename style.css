@@ -90,6 +90,13 @@ body {
     font-size: 2rem;
     margin: 0;
   }
+  .message {
+    text-align: center;
+    font-size: 1.5rem;
+    color: white;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
   
   .grid {
     flex-grow: 1;
@@ -110,8 +117,8 @@ body {
     gap: 10px;
     width: 90vmin;
     height: 90vmin;
-    max-width: 400px;
-    max-height: 400px;
+   width: 400px;
+   height: 400px;
   }
   
   .grid-item {
@@ -126,6 +133,11 @@ body {
     color: white;
     cursor: pointer;
   }
+  .grid-item.highlight {
+    background-color: gold;
+    color: black;
+  }
+  
   
   .grid-item:hover {
     background-color: #3cc8f0;
@@ -134,7 +146,7 @@ body {
     text-align: center;
   }
   
-  .styled-button {
+  .new-game {
     font-family: 'Arial', sans-serif;
     font-size: 24px;
     font-weight: bold;
@@ -146,8 +158,8 @@ body {
     position: relative;
   }
   
-  .styled-button::before,
-  .styled-button::after {
+  .new-game::before,
+  .new-game::after {
     content: '';
 
     top: -8px;
@@ -156,7 +168,7 @@ body {
     z-index: -1;
   }
   
-  .styled-button::after {
+  .new-game::after {
     top: 8px;
     left: 8px;
   }
