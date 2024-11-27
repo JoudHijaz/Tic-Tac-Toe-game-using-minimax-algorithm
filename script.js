@@ -121,3 +121,54 @@ document.addEventListener('DOMContentLoaded', initializeGame);
 
 // Reset the game 
 document.querySelector('.new-game').addEventListener('click', initializeGame);
+
+
+function win(player) {
+  const winningCombinations = [
+      [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
+      [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
+      [0, 4, 8], [2, 4, 6]             // Diagonals
+  ];
+
+  for (const combination of winningCombinations) {
+      const [a, b, c] = combination;
+      if (boardState[a] === player && boardState[b] === player && boardState[c] === player) {
+          return true;
+      }
+  }
+  return false;
+}
+
+function score(game, player, opponent) {
+  if (game.win(player)) {
+      return 10;// returns 10 if the player wins 
+  } else if (game.win(opponent)) {
+      return -10;//-10 if the other player wins 
+  } else {
+      return 0;// draw 
+  }
+}
+function minimax(game,depth,isMaximizingPlayer,player, opponent){
+  if (gameOver){
+    return score(game, player, opponent);
+  }
+  const score =[];
+  const moves= [];
+  const availableMoves = getAvailableMoves(game); // empty  cells on the board where a move can be made
+  //for availableMoves
+}
+function getAvailableMoves(game) {
+  const moves = [];
+  for (let i = 0; i < boardState.length; i++) {
+      if (boardState[i] === '') {
+          moves.push(i);// add the  index of the empty cells to the move array 
+      }
+  }
+  return moves;
+}
+// after specifit move will generate a new game state 
+function getNewState(game, move, player) {
+  const newBoardState = [...boardState]; // copy of the current boardState 
+  newBoardState[move] = player;
+  return { boardState: newBoardState, win: win };
+}
