@@ -1,114 +1,147 @@
-let currentPlayer = 'X'; // Track the current player
-let boardState = ['', '', '', '', '', '', '', '', '']; // Track the state of the board
+let currentPlayer = 'X';
+let boardState = ['', '', '', '', '', '', '', '', ''];
+let gameOver = false;
 
-
-const winningCombinations = [
-    [0, 1, 2], // Top row
-    [3, 4, 5], // Middle row
-    [6, 7, 8], // Bottom row
-    [0, 3, 6], // Left column
-    [1, 4, 7], // Middle column
-    [2, 5, 8], // Right column
-    [0, 4, 8], // Diagonal from top-left to bottom-right
-    [2, 4, 6]  // Diagonal from top-right to bottom-left
-  ];
-
-// Initialize the game
 function initializeGame() {
-  console.log('Game Initialized');
-  currentPlayer = 'X'; // Reset to Player X
-  boardState = ['', '', '', '', '', '', '', '', '']; // Clear board state
+    console.log('Game Initialized');
+    currentPlayer = 'X';
+    boardState = ['', '', '', '', '', '', '', '', ''];
+    gameOver = false;
 
-  // Clear the visual board
-  const gridItems = document.querySelectorAll('.grid-item');
-  gridItems.forEach((cell, index) => {
-    cell.textContent = ''; // Clear X or O from the cell
-    cell.classList.remove('highlight'); // Optional: Remove any highlights
-    const newCell = cell.cloneNode(true); // Clone the cell to remove all listeners
-    cell.parentNode.replaceChild(newCell, cell);
-    newCell.addEventListener('click', (event) => handleCellClick(index));
-  });
+    const gridItems = document.querySelectorAll('.grid-item');
+    gridItems.forEach((cell, index) => {
+        cell.textContent = '';
+        cell.classList.remove('highlight');
+        const newCell = cell.cloneNode(true);
+        cell.parentNode.replaceChild(newCell, cell);
+        newCell.addEventListener('click', () => handleCellClick(index));
+    });
 
-  // Update the message display
-  updateMessage();
+    updateMessage();
 }
 
-// Handle a cell click
 function handleCellClick(index) {
-    if (boardState[index] !== '') {
-      console.log('Cell already taken!');
-      return; // Ignore clicks on occupied cells
-    }
-  
-    // Update the cell visually and in the board state
+    if (gameOver || boardState[index] !== '') return;
+
     const cell = document.querySelectorAll('.grid-item')[index];
     cell.textContent = currentPlayer;
     boardState[index] = currentPlayer;
-  
-    // Check for a winner
+
     const result = checkWinner();
     if (result) {
-      if (result === 'draw') {
-        displayResult("It's a Draw!");
-      } else {
-        displayResult(`Player ${result} Wins!`);
-      }
-      return; // Stop further moves
+        if (result === 'draw') {
+            displayResult("It's a Draw!");
+            const drawScoreElement = document.getElementById('draw-score');
+            drawScoreElement.textContent = parseInt(drawScoreElement.textContent) + 1;
+        } else {
+            displayResult(`Player ${result} Wins!`);
+            const scoreElement = document.getElementById(result === 'X' ? 'score-player-x' : 'score-player-o');
+            scoreElement.textContent = parseInt(scoreElement.textContent) + 1;
+        }
+        gameOver = true;
+        return;
     }
-  
-    // Switch the player
+
     switchPlayer();
-  
-    // Update the display message
     updateMessage();
-  }
-  
 
-// Switch the current player
+    if (currentPlayer === 'O') {
+        setTimeout(() => aiMove('O', 'X'), 500); // Delay for AI move
+    }
+}
+
 function switchPlayer() {
-  currentPlayer = currentPlayer === 'X' ? 'O' : 'X'; // Toggle between X and O
-  console.log(`Current Player: ${currentPlayer}`);
+    currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+    console.log(`Current Player: ${currentPlayer}`);
 }
 
-// Update the turn display message
 function updateMessage() {
-  const messageElement = document.querySelector('.message');
-  if (messageElement) {
-    messageElement.textContent = `Player ${currentPlayer}'s Turn`;
-  }
+    const messageElement = document.querySelector('.message');
+    if (messageElement) {
+        messageElement.textContent = `Player ${currentPlayer}'s Turn`;
+    }
 }
+
 function checkWinner() {
-    for (const combination of winningCombinations) {
-      const [a, b, c] = combination; // Destructure the indices
-      if (
-        boardState[a] && // Check if the cell is not empty
-        boardState[a] === boardState[b] && // Check if all three are the same
-        boardState[a] === boardState[c]
-      ) {
-        return boardState[a]; // Return 'X' or 'O'
-      }
-    }
-  
-    // If no winner but the board is full, it's a draw
-    if (!boardState.includes('')) {
-      return 'draw';
-    }
-  
-    // Otherwise, no winner yet
-    return null;
-  }
-function displayResult(message) {
-  const messageElement = document.querySelector('.message');
-  if (messageElement) {
-    messageElement.textContent = message;
-  }
+    const winningCombinations = [
+        [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
+        [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
+        [0, 4, 8], [2, 4, 6]             // Diagonals
+    ];
 
-  
+    for (const combination of winningCombinations) {
+        const [a, b, c] = combination;
+        if (boardState[a] && boardState[a] === boardState[b] && boardState[a] === boardState[c]) {
+            combination.forEach(index => document.querySelectorAll('.grid-item')[index].classList.add('highlight'));
+            return boardState[a];
+        }
+    }
+
+    if (boardState.every(cell => cell !== '')) {
+        return 'draw';
+    }
+
+    return null;
 }
 
+function displayResult(message) {
+    const resultElement = document.querySelector('.message');
+    if (resultElement) {
+        resultElement.textContent = message;
+    }
+}
 
-// Set up the game when the page loads
+function getAvailableMoves() {
+    return boardState.reduce((acc, cell, index) => {
+        if (cell === '') acc.push(index);
+        return acc;
+    }, []);
+}
+
+function getNewState(move, player) {
+    const newBoardState = [...boardState];
+    newBoardState[move] = player;
+    return newBoardState;
+}
+
+function minimax(gameState, depth, isMaximizing, player, opponent) {
+    const result = checkWinner();
+    if (result === player) return 10 - depth;
+    if (result === opponent) return depth - 10;
+    if (result === 'draw') return 0;
+
+    const availableMoves = getAvailableMoves();
+    let bestScore = isMaximizing ? -Infinity : Infinity;
+
+    for (const move of availableMoves) {
+        const newState = getNewState(move, isMaximizing ? player : opponent);
+        const score = minimax(newState, depth + 1, !isMaximizing, player, opponent);
+
+        bestScore = isMaximizing ? Math.max(score, bestScore) : Math.min(score, bestScore);
+    }
+
+    return bestScore;
+}
+
+function aiMove(player, opponent) {
+    const availableMoves = getAvailableMoves();
+    let bestScore = -Infinity;
+    let bestMove = null;
+
+    for (const move of availableMoves) {
+        const newState = getNewState(move, player);
+        const score = minimax(newState, 0, false, player, opponent);
+
+        if (score > bestScore) {
+            bestScore = score;
+            bestMove = move;
+        }
+    }
+
+    if (bestMove !== null) {
+        handleCellClick(bestMove);
+    }
+}
+
 document.addEventListener('DOMContentLoaded', initializeGame);
-
-// Reset the game 
 document.querySelector('.new-game').addEventListener('click', initializeGame);
