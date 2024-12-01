@@ -1,59 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="./style.css">
-</head>
-<body>
-    <div class="container ">
-        <div class="title">
-            <span class="word tic">tic.</span>
-            <span class="word tac">tac.</span>
-            <span class="word toe">toe.</span>
-        
-        </div>
-        <div class="content">
-    
-            <div class="scores">
-                <div class="score player-x">
-                  <p>PLAYER X</p>
-                  <p class="score-value">0</p>
-                </div>
-                <div class="score draw">
-                  <p>DRAW</p>
-                  <p class="score-value">0</p>
-                </div>
-                <div class="score player-o">
-                  <p>PLAYER O</p>
-                  <p class="score-value">0</p>
-                </div>
-            </div>
-            <div class="message">Player X's Turn</div>
 
-            <div class="grid">
-                <div class="main">
-                    <div class="board">
-                        <div class="grid-item" data-id="1" role="button"></div>
-                        <div class="grid-item" data-id="2" role="button"></div>
-                        <div class="grid-item" data-id="3" role="button"></div>
-                        <div class="grid-item" data-id="4" role="button"></div>
-                        <div class="grid-item" data-id="5" role="button"></div>
-                        <div class="grid-item" data-id="6" role="button"></div>
-                        <div class="grid-item" data-id="7" role="button"></div>
-                        <div class="grid-item" data-id="8" role="button"></div>
-                        <div class="grid-item" data-id="9" role="button"></div>
-                    </div>
-                    
-                </div>
-            </div>
-    
-        </div>
-        <div class="button-container">
-            <button class="new-game">New Game</button>
-        </div>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+  <div class="container ">
+    <div class="title">
+      <span class="word tic">tic.</span>
+      <span class="word tac">tac.</span>
+      <span class="word toe">toe.</span>
+
     </div>
-    <script src="./script.js"></script>
+    <div class="mode-selection" id="mode-selection">
+      <h1>Select Game Mode</h1>
+      <button class="mode-button" id="pvp-button">Player vs Player</button>
+      <button class="mode-button" id="pvc-button">Player vs Computer</button>
+
+    </div>
+
+    <div class="content">
+
+      <div class="scores">
+        <div class="score player-x">
+          <p>PLAYER X</p>
+          <p class="score-value">0</p>
+        </div>
+        <div class="score draw">
+          <p>DRAW</p>
+          <p class="score-value">0</p>
+        </div>
+        <div class="score player-o">
+          <p>PLAYER O</p>
+          <p class="score-value">0</p>
+        </div>
+      </div>
+      <div class="message">Player X's Turn</div>
+
+      <div class="grid">
+        <div class="main">
+          <div class="board">
+            <div class="grid-item" data-id="1" role="button"></div>
+            <div class="grid-item" data-id="2" role="button"></div>
+            <div class="grid-item" data-id="3" role="button"></div>
+            <div class="grid-item" data-id="4" role="button"></div>
+            <div class="grid-item" data-id="5" role="button"></div>
+            <div class="grid-item" data-id="6" role="button"></div>
+            <div class="grid-item" data-id="7" role="button"></div>
+            <div class="grid-item" data-id="8" role="button"></div>
+            <div class="grid-item" data-id="9" role="button"></div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+    <div class="button-container">
+      <button class="new-game">New Game</button>
+    </div>
+  </div>
+  <script src="./script.js"></script>
 </body>
+
 </html>
