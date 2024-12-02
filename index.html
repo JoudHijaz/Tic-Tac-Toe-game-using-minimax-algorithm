@@ -23,45 +23,46 @@
 
     </div>
 
-    <div class="content">
-
-      <div class="scores">
-        <div class="score player-x">
-          <p>PLAYER X</p>
-          <p class="score-value">0</p>
-        </div>
-        <div class="score draw">
-          <p>DRAW</p>
-          <p class="score-value">0</p>
-        </div>
-        <div class="score player-o">
-          <p>PLAYER O</p>
-          <p class="score-value">0</p>
-        </div>
-      </div>
-      <div class="message">Player X's Turn</div>
-
-      <div class="grid">
-        <div class="main">
-          <div class="board">
-            <div class="grid-item" data-id="1" role="button"></div>
-            <div class="grid-item" data-id="2" role="button"></div>
-            <div class="grid-item" data-id="3" role="button"></div>
-            <div class="grid-item" data-id="4" role="button"></div>
-            <div class="grid-item" data-id="5" role="button"></div>
-            <div class="grid-item" data-id="6" role="button"></div>
-            <div class="grid-item" data-id="7" role="button"></div>
-            <div class="grid-item" data-id="8" role="button"></div>
-            <div class="grid-item" data-id="9" role="button"></div>
+    <div class="game-container" id="game-container" >
+      <div class="sub-container">
+        <div class="scores">
+                
+          <div class="score" id="player-x">
+              PLAYER X <span class="score-value" id="score-player-x">0</span>
           </div>
-
+          <div class="score" id="draw">
+              Draws <span class="score-value" id="draw-score">0</span>
+          </div>
+          <div class="score" id="player-o">
+              PLAYER O <span class="score-value" id="score-player-o">0</span>
+          </div>
+         
+      </div>
+        <div class="message"></div>
+  
+        <div class="grid">
+          <div class="main">
+            <div class="board">
+              <div class="grid-item" data-id="1" role="button"></div>
+              <div class="grid-item" data-id="2" role="button"></div>
+              <div class="grid-item" data-id="3" role="button"></div>
+              <div class="grid-item" data-id="4" role="button"></div>
+              <div class="grid-item" data-id="5" role="button"></div>
+              <div class="grid-item" data-id="6" role="button"></div>
+              <div class="grid-item" data-id="7" role="button"></div>
+              <div class="grid-item" data-id="8" role="button"></div>
+              <div class="grid-item" data-id="9" role="button"></div>
+            </div>
+  
+          </div>
         </div>
       </div>
-
+      <div class="button-container" >
+        <button class="new-game" id="new-game-button">New Game</button>
+        <button class="back-button" id="back-button">Back</button>
+      </div>
     </div>
-    <div class="button-container">
-      <button class="new-game">New Game</button>
-    </div>
+    
   </div>
   <script src="./script.js"></script>
 </body>

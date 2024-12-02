@@ -1,9 +1,25 @@
 let currentPlayer = 'X';
 let boardState = ['', '', '', '', '', '', '', '', ''];
 let gameOver = false;
+let gameMode = 'pvp';
+
+
+function startGame() {
+    // Hide the mode selection screen
+    const modeSelection = document.getElementById('mode-selection');
+    const gameContainer = document.getElementById('game-container');
+
+    // Hide mode selection and show game container
+    if (modeSelection) modeSelection.style.display = 'none';
+    if (gameContainer) gameContainer.style.display = 'flex';
+
+
+    // Initialize the game
+    initializeGame();
+}
 
 function initializeGame() {
-    console.log('Game Initialized');
+    console.log(`Game Initialized in ${gameMode} mode`);
     currentPlayer = 'X';
     boardState = ['', '', '', '', '', '', '', '', ''];
     gameOver = false;
@@ -27,15 +43,19 @@ function handleCellClick(index) {
     cell.textContent = currentPlayer;
     boardState[index] = currentPlayer;
 
-    const result = checkWinner();
+    const result = checkWinner(boardState);
     if (result) {
         if (result === 'draw') {
             displayResult("It's a Draw!");
             const drawScoreElement = document.getElementById('draw-score');
+            if (!drawScoreElement) console.error("Draw score element not found!");
+
             drawScoreElement.textContent = parseInt(drawScoreElement.textContent) + 1;
         } else {
             displayResult(`Player ${result} Wins!`);
             const scoreElement = document.getElementById(result === 'X' ? 'score-player-x' : 'score-player-o');
+            if (!scoreElement) console.error("Score element for player not found!");
+
             scoreElement.textContent = parseInt(scoreElement.textContent) + 1;
         }
         gameOver = true;
@@ -45,8 +65,8 @@ function handleCellClick(index) {
     switchPlayer();
     updateMessage();
 
-    if (currentPlayer === 'O') {
-        setTimeout(() => aiMove('O', 'X'), 500); // Delay for AI move
+    if (gameMode === 'pvc' && currentPlayer === 'O') {
+        setTimeout(() => aiMove('O', 'X'), 500);
     }
 }
 
@@ -62,7 +82,7 @@ function updateMessage() {
     }
 }
 
-function checkWinner() {
+function checkWinner(gameState) {
     const winningCombinations = [
         [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
         [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
@@ -71,13 +91,13 @@ function checkWinner() {
 
     for (const combination of winningCombinations) {
         const [a, b, c] = combination;
-        if (boardState[a] && boardState[a] === boardState[b] && boardState[a] === boardState[c]) {
+        if (gameState[a] && gameState[a] === gameState[b] && gameState[a] === gameState[c]) {
             combination.forEach(index => document.querySelectorAll('.grid-item')[index].classList.add('highlight'));
-            return boardState[a];
+            return gameState[a];
         }
     }
 
-    if (boardState.every(cell => cell !== '')) {
+    if (gameState.every(cell => cell !== '')) {
         return 'draw';
     }
 
@@ -85,51 +105,29 @@ function checkWinner() {
 }
 
 function displayResult(message) {
-    const resultElement = document.querySelector('.message');
-    if (resultElement) {
-        resultElement.textContent = message;
+    const messageElement = document.querySelector('.message');
+    if (messageElement) {
+        messageElement.textContent = message;
     }
 }
 
-function getAvailableMoves() {
-    return boardState.reduce((acc, cell, index) => {
-        if (cell === '') acc.push(index);
-        return acc;
-    }, []);
-}
-
-function getNewState(move, player) {
-    const newBoardState = [...boardState];
-    newBoardState[move] = player;
-    return newBoardState;
-}
-
-function minimax(gameState, depth, isMaximizing, player, opponent) {
-    const result = checkWinner();
-    if (result === player) return 10 - depth;
-    if (result === opponent) return depth - 10;
-    if (result === 'draw') return 0;
-
-    const availableMoves = getAvailableMoves();
-    let bestScore = isMaximizing ? -Infinity : Infinity;
-
-    for (const move of availableMoves) {
-        const newState = getNewState(move, isMaximizing ? player : opponent);
-        const score = minimax(newState, depth + 1, !isMaximizing, player, opponent);
-
-        bestScore = isMaximizing ? Math.max(score, bestScore) : Math.min(score, bestScore);
+function incrementScore(result) {
+    if (result === 'draw') {
+        const drawScoreElement = document.getElementById('draw-score');
+        drawScoreElement.textContent = parseInt(drawScoreElement.textContent) + 1;
+    } else {
+        const scoreElement = document.getElementById(result === 'X' ? 'score-player-x' : 'score-player-o');
+        scoreElement.textContent = parseInt(scoreElement.textContent) + 1;
     }
-
-    return bestScore;
 }
 
 function aiMove(player, opponent) {
-    const availableMoves = getAvailableMoves();
+    const availableMoves = getAvailableMoves(boardState);
     let bestScore = -Infinity;
     let bestMove = null;
 
     for (const move of availableMoves) {
-        const newState = getNewState(move, player);
+        const newState = getNewState(boardState, move, player);
         const score = minimax(newState, 0, false, player, opponent);
 
         if (score > bestScore) {
@@ -143,5 +141,83 @@ function aiMove(player, opponent) {
     }
 }
 
-document.addEventListener('DOMContentLoaded', initializeGame);
-document.querySelector('.new-game').addEventListener('click', initializeGame);
+function getAvailableMoves(gameState) {
+    return gameState.reduce((acc, cell, index) => {
+        if (cell === '') acc.push(index);
+        return acc;
+    }, []);
+}
+
+function getNewState(gameState, move, player) {
+    const newState = [...gameState];
+    newState[move] = player;
+    return newState;
+}
+
+function minimax(gameState, depth, isMaximizing, player, opponent) {
+    const result = checkWinner(gameState);
+    if (result === player) return 10 - depth;
+    if (result === opponent) return depth - 10;
+    if (result === 'draw') return 0;
+
+    const availableMoves = getAvailableMoves(gameState);
+    if (!availableMoves.length) return 0;
+
+    let bestScore = isMaximizing ? -Infinity : Infinity;
+
+    for (const move of availableMoves) {
+        const newState = getNewState(gameState, move, isMaximizing ? player : opponent);
+        const score = minimax(newState, depth + 1, !isMaximizing, player, opponent);
+
+        bestScore = isMaximizing ? Math.max(score, bestScore) : Math.min(score, bestScore);
+    }
+
+    return bestScore;
+}
+function resetGame() {
+    console.log("New Game Started");
+    // Reset game variables
+    currentPlayer = 'X';
+    boardState = ['', '', '', '', '', '', '', '', ''];
+    gameOver = false;
+
+    // Clear the board UI
+    const gridItems = document.querySelectorAll('.grid-item');
+    gridItems.forEach((cell) => {
+        cell.textContent = ''; // Clear the cell's content
+        cell.classList.remove('highlight'); // Remove any winning highlights
+    });
+    
+    // Reset the score display if needed
+    const messageElement = document.querySelector('.message');
+    if (messageElement) {
+        messageElement.textContent = `Player ${currentPlayer}'s Turn`;
+    }
+}
+document.getElementById('new-game-button').addEventListener('click', resetGame);
+
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById("pvp-button").addEventListener('click', () => {
+        gameMode = 'pvp';
+        startGame();
+    });
+
+    document.getElementById("pvc-button").addEventListener('click', () => {
+        gameMode = 'pvc';
+        startGame();
+    });
+
+    document.getElementById('back-button').addEventListener('click', () => {
+        const gameContainer = document.getElementById('game-container');
+        if (gameContainer) gameContainer.style.display = 'none';
+
+        const modeSelection = document.getElementById('mode-selection');
+        if (modeSelection) modeSelection.style.display = 'flex';
+        // Reset the score display
+        document.getElementById('score-player-x').textContent = '0';
+        document.getElementById('score-player-o').textContent = '0';
+        document.getElementById('draw-score').textContent = '0';
+
+        resetGame();
+    });
+});

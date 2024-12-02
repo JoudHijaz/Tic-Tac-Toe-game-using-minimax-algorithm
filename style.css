@@ -5,6 +5,7 @@ html, body {
   height: 100%;
   background-color: #4a1a78; 
 }
+
 body {
     font-family: Arial, sans-serif;
     justify-content: center;
@@ -19,21 +20,15 @@ body {
   gap: 20px;
   justify-content: center;
   align-items: center;
-  margin-top: 20px;
-  margin-bottom: 20px;
+  max-width: 800px;
+
+ 
 }
   
-  .content {
-    display: flex;
-    flex-direction: column;
-    max-width: 800px;
-    position: relative;
-    display: none;
-  }
-  
   .title {
-    bottom: 10px;
-    left: 20px;
+  display: flex;
+  flex-direction: column;
+
   }
   
   .word {
@@ -91,45 +86,59 @@ body {
     transform: scale(0.95); 
 }
 
+.game-container {
+  flex-direction: row;
+  position: relative;
+  display: none;
+  gap: 20px;
+  height: 100%;
+  width: 100%;
+}
+.game-container .sub-container{
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 100%;
+}
+
 .scores {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 20px; 
-    margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px; 
+  margin-bottom: 20px;
+}
+
+.score {
+  width: 100px;
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  font-weight: bold;
+  text-align: center;
+  color: black;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+}
+
+#player-x {
+  background-color: #3cc8f0; 
+}
+
+#draw {
+  background-color:rgb(218, 216, 216);
   }
-  
-  .score {
-    width: 100px;
-    height: 100px;
-    background-color: #cfcfcf; 
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    border-radius: 10px;
-    font-weight: bold;
-    text-align: center;
-    color: black;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Subtle shadow */
-  }
-  
-  .score.player-x {
-    background-color: #3cc8f0; 
-  }
-  
-  .score.draw {
-    background-color:rgb(218, 216, 216);
-  }
-  
-  .score.player-o {
-    background-color: #f6d719; 
-  }
-  
-  .score-value {
-    font-size: 2rem;
-    margin: 0;
-  }
+
+#player-o {
+  background-color: #f6d719; 
+}
+
+.score-value {
+  font-size: 2rem;
+  margin: 0;
+}
   .message {
     text-align: center;
     font-size: 1.5rem;
@@ -149,6 +158,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 100%;
   }
   
   .board {
@@ -157,8 +167,9 @@ body {
     gap: 10px;
     width: 90vmin;
     height: 90vmin;
-   width: 400px;
-   height: 400px;
+    max-width: 400px;
+    max-height: 400px;
+   
   }
   
   .grid-item {
@@ -184,6 +195,11 @@ body {
   }
   .button-container {
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
   }
   
   .new-game {
@@ -196,7 +212,6 @@ body {
     padding: 10px 40px;
     cursor: pointer;
     position: relative;
-    display: none;
   }
   
   .new-game::before,
@@ -213,14 +228,55 @@ body {
     top: 8px;
     left: 8px;
   }
-  
+  .back-button {
+    font-family: 'Arial', sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    color: black;
+    background-color: #f6d719; /* Matches Player O's color */
+    border-radius: 10px;
+    padding: 10px 20px;
+    margin-left: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.back-button:hover {
+    background-color: #d6b517;
+    transform: scale(1.05);
+}
+
+.back-button:active {
+    background-color: #b59b14;
+    transform: scale(0.95);
+}
+
   @media screen and (max-width: 767px) {
     body{
       width: 100%;
     }
-    .container {
+    .game-container{
+      flex-direction: column;
+
+    }
+
+  .board {
+    width: 200px;
+    height: 200px;
+  }
+
+
+    .container{
       display: flex;
       flex-direction: column;
       gap: 20px;
+      height: 100%;
+
+    }
+
+     .button-container {
+      display: flex;
+      flex-direction: row;
+
     }
   }
