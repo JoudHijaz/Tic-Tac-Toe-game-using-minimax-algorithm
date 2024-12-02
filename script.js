@@ -64,10 +64,11 @@ function handleCellClick(index) {
 
     switchPlayer();
     updateMessage();
-
+    const difficulty = 'medium';
     if (gameMode === 'pvc' && currentPlayer === 'O') {
-        setTimeout(() => aiMove('O', 'X'), 500);
+        setTimeout(() => aiMove('O', 'X', difficulty), 500); // Pass difficulty here
     }
+    
 }
 
 function switchPlayer() {
@@ -97,7 +98,7 @@ function checkWinner(gameState) {
         }
     }
 
-    if (gameState.every(cell => cell !== '')) {
+    if (gameState.every(cell => cell !== '')) { // the cells are not empty so draw
         return 'draw';
     }
 
@@ -120,19 +121,29 @@ function incrementScore(result) {
         scoreElement.textContent = parseInt(scoreElement.textContent) + 1;
     }
 }
+function aiMove(player, opponent, difficulty) {
+    const maxDepth = {
+        easy: 1,
+        medium: 3,
+        hard: 8
+    }[difficulty];
 
-function aiMove(player, opponent) {
     const availableMoves = getAvailableMoves(boardState);
-    let bestScore = -Infinity;
     let bestMove = null;
 
-    for (const move of availableMoves) {
-        const newState = getNewState(boardState, move, player);
-        const score = minimax(newState, 0, false, player, opponent);
+    if (difficulty === 'easy' && Math.random() < 0.5) {
+        // 50% chance to make a random move
+        bestMove = availableMoves[Math.floor(Math.random() * availableMoves.length)];
+    } else {
+        let bestScore = -Infinity;
+        for (const move of availableMoves) {
+            const newState = getNewState(boardState, move, player);
+            const score = minimax(newState, 0, false, player, opponent, maxDepth);
 
-        if (score > bestScore) {
-            bestScore = score;
-            bestMove = move;
+            if (score > bestScore) {
+                bestScore = score;
+                bestMove = move;
+            }
         }
     }
 
@@ -141,24 +152,31 @@ function aiMove(player, opponent) {
     }
 }
 
-function getAvailableMoves(gameState) {
+
+
+function getAvailableMoves(gameState) { // returns the empty cells in the board 
     return gameState.reduce((acc, cell, index) => {
         if (cell === '') acc.push(index);
         return acc;
     }, []);
 }
-
+//Simulates the state of the board after a specific move.
 function getNewState(gameState, move, player) {
-    const newState = [...gameState];
-    newState[move] = player;
+    const newState = [...gameState]; // copy the current game state
+    newState[move] = player;//Apply the move by setting the player’s symbol ('X' or 'O') in the specified cell.
     return newState;
 }
-
-function minimax(gameState, depth, isMaximizing, player, opponent) {
+// depth base condition max 8  
+// minimax to calculate the outcome for the move
+function minimax(gameState, depth, isMaximizing, player, opponent, maxDepth) {
     const result = checkWinner(gameState);
     if (result === player) return 10 - depth;
     if (result === opponent) return depth - 10;
     if (result === 'draw') return 0;
+
+    if (depth >= maxDepth) {
+        return heuristicEvaluation(gameState, player, opponent); // Use a heuristic to evaluate the state.
+    }
 
     const availableMoves = getAvailableMoves(gameState);
     if (!availableMoves.length) return 0;
@@ -167,13 +185,21 @@ function minimax(gameState, depth, isMaximizing, player, opponent) {
 
     for (const move of availableMoves) {
         const newState = getNewState(gameState, move, isMaximizing ? player : opponent);
-        const score = minimax(newState, depth + 1, !isMaximizing, player, opponent);
+        const score = minimax(newState, depth + 1, !isMaximizing, player, opponent, maxDepth);
 
         bestScore = isMaximizing ? Math.max(score, bestScore) : Math.min(score, bestScore);
     }
 
     return bestScore;
 }
+function heuristicEvaluation(gameState, player, opponent) {
+    // Example heuristic: count the number of player's pieces minus opponent's pieces
+    const playerCount = gameState.filter(cell => cell === player).length;
+    const opponentCount = gameState.filter(cell => cell === opponent).length;
+
+    return playerCount - opponentCount;
+}
+
 function resetGame() {
     console.log("New Game Started");
     // Reset game variables
