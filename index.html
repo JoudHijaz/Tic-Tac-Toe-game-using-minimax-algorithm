@@ -22,24 +22,33 @@
       <button class="mode-button" id="pvc-button">Player vs Computer</button>
 
     </div>
+    <div class="level-selection" id="level-selection">
+      <h1>Select Game Level</h1>
+      <button class="level-button" id="easy">Easy</button>
+      <button class="level-button" id="medium">Medium</button>
+      <button class="level-button" id="hard">Hard</button>
+      <button class="back-button" id="back-from-level">Back</button>
 
-    <div class="game-container" id="game-container" >
+
+    </div>
+
+    <div class="game-container" id="game-container">
       <div class="sub-container">
         <div class="scores">
-                
+
           <div class="score" id="player-x">
-              PLAYER X <span class="score-value" id="score-player-x">0</span>
+            PLAYER X <span class="score-value" id="score-player-x">0</span>
           </div>
           <div class="score" id="draw">
-              Draws <span class="score-value" id="draw-score">0</span>
+            Draws <span class="score-value" id="draw-score">0</span>
           </div>
           <div class="score" id="player-o">
-              PLAYER O <span class="score-value" id="score-player-o">0</span>
+            PLAYER O <span class="score-value" id="score-player-o">0</span>
           </div>
-         
-      </div>
+
+        </div>
         <div class="message"></div>
-  
+
         <div class="grid">
           <div class="main">
             <div class="board">
@@ -53,16 +62,16 @@
               <div class="grid-item" data-id="8" role="button"></div>
               <div class="grid-item" data-id="9" role="button"></div>
             </div>
-  
+
           </div>
         </div>
       </div>
-      <div class="button-container" >
+      <div class="button-container">
         <button class="new-game" id="new-game-button">New Game</button>
-        <button class="back-button" id="back-button">Back</button>
+        <button class="back-button" id="back-from-game">Back</button>
       </div>
     </div>
-    
+
   </div>
   <script src="./script.js"></script>
 </body>

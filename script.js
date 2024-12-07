@@ -2,21 +2,24 @@ let currentPlayer = 'X';
 let boardState = ['', '', '', '', '', '', '', '', ''];
 let gameOver = false;
 let gameMode = 'pvp';
+let difficulty = 'medium';
 
-
-function startGame() {
-    // Hide the mode selection screen
+function updateUIVisibility() {
     const modeSelection = document.getElementById('mode-selection');
     const gameContainer = document.getElementById('game-container');
+    const levelSelection = document.getElementById('level-selection');
 
-    // Hide mode selection and show game container
-    if (modeSelection) modeSelection.style.display = 'none';
-    if (gameContainer) gameContainer.style.display = 'flex';
+    modeSelection.style.display = 'none'; // Assumes element is always present
+    levelSelection.style.display = 'none'; // Assumes element is always present
+    gameContainer.style.display = 'flex';  // Assumes element is always present
+}
 
-
-    // Initialize the game
+function startGame() {
+    console.log(`Game started in ${gameMode} mode with difficulty ${difficulty}`);
+    updateUIVisibility();
     initializeGame();
 }
+
 
 function initializeGame() {
     console.log(`Game Initialized in ${gameMode} mode`);
@@ -64,7 +67,7 @@ function handleCellClick(index) {
 
     switchPlayer();
     updateMessage();
-    const difficulty = 'medium';
+    
     if (gameMode === 'pvc' && currentPlayer === 'O') {
         setTimeout(() => aiMove('O', 'X', difficulty), 500); // Pass difficulty here
     }
@@ -78,7 +81,9 @@ function switchPlayer() {
 
 function updateMessage() {
     const messageElement = document.querySelector('.message');
-    if (messageElement) {
+    if (gameMode === 'pvc') {
+        messageElement.textContent = `Player ${currentPlayer}'s Turn - Difficulty: ${difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}`;
+    } else {
         messageElement.textContent = `Player ${currentPlayer}'s Turn`;
     }
 }
@@ -219,31 +224,53 @@ function resetGame() {
     if (messageElement) {
         messageElement.textContent = `Player ${currentPlayer}'s Turn`;
     }
+  
 }
 document.getElementById('new-game-button').addEventListener('click', resetGame);
-
 document.addEventListener('DOMContentLoaded', () => {
+    const modeSelection = document.getElementById('mode-selection');
+    const levelSelection = document.getElementById('level-selection');
+    const gameContainer = document.getElementById('game-container');
+
     document.getElementById("pvp-button").addEventListener('click', () => {
         gameMode = 'pvp';
+        modeSelection.style.display = 'none';
+        gameContainer.style.display = 'flex';
         startGame();
     });
 
-    document.getElementById("pvc-button").addEventListener('click', () => {
+    document.getElementById('pvc-button').addEventListener('click', () => {
         gameMode = 'pvc';
-        startGame();
+        modeSelection.style.display = 'none';
+        levelSelection.style.display = 'flex';
     });
 
-    document.getElementById('back-button').addEventListener('click', () => {
-        const gameContainer = document.getElementById('game-container');
-        if (gameContainer) gameContainer.style.display = 'none';
+    // Add listeners to all level buttons
+    document.querySelectorAll('.level-button').forEach(button => {
+        button.addEventListener('click', () => {
+            difficulty = button.id; // Set difficulty based on the button clicked
+            console.log(`Difficulty set to ${difficulty}`);
+            levelSelection.style.display = 'none';
+            gameContainer.style.display = 'flex';
+            startGame();
+        });
+    });
 
-        const modeSelection = document.getElementById('mode-selection');
-        if (modeSelection) modeSelection.style.display = 'flex';
-        // Reset the score display
+    document.getElementById('back-from-level').addEventListener('click', () => {
+        levelSelection.style.display = 'none';
+        modeSelection.style.display = 'flex';
+    });
+
+    document.getElementById('back-from-game').addEventListener('click', () => {
         document.getElementById('score-player-x').textContent = '0';
         document.getElementById('score-player-o').textContent = '0';
         document.getElementById('draw-score').textContent = '0';
-
+        gameContainer.style.display = 'none';
+        if (gameMode === 'pvc') {
+            levelSelection.style.display = 'flex';
+        } else {
+            modeSelection.style.display = 'flex';
+        }
         resetGame();
     });
 });
